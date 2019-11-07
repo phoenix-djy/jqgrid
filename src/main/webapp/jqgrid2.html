@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--bootstrap的css样式-->
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <!--bootstrap与jqgrid整合后的css样式-->
+    <link rel="stylesheet" href="bootstrap-jqgrid/css/trirand/ui.jqgrid-bootstrap.css">
+    <!--引入js文件-->
+    <script src="bootstrap-3.3.7-dist/js/jquery-3.3.1.min.js"></script>
+    <!--bootstrap的js文件-->
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <!--jqgrid的bootstrap整合的国际化的js文件-->
+    <script src="bootstrap-jqgrid/js/trirand/i18n/grid.locale-cn.js"></script>
+    <!--jqgrid的bootstrap整合的js文件-->
+    <script src="bootstrap-jqgrid/js/trirand/jquery.jqGrid.min.js"></script>
+
+    <style type="text/css">
+        .aa{
+            background: pink;
+        }
+        .bb{
+            color: yellow;
+        }
+
+    </style>
+    <script type="application/javascript">
+        $(function(){
+        //通过jqgrid为表格渲染数据
+        $("#table").jqGrid({
+            styleUI:"Bootstrap",//开始bootstrap的风格
+            url:"users.json",//获取数据的地址
+            datatype:"json",//自动把后台响应回的json协议串自动转换为jquery中的对象
+            cellEdit:true, //开始表格的可编辑状态
+            pager:"#pager", //开启分页的工具栏
+            rowNum:"3", //每页展示的数据条目
+            page:"1", //代表初始化时展示第几页
+            rowList:["3","6","9"],  //可选的每页展示条数
+            viewrecords:true,  //是否展示总条数
+            caption:"定义表格名称",
+            autowidth:true,//自动调整表格宽度
+            colNames:["用户id","用户名字","用户密码","用户年龄","性别"],  //指定每一列的名字
+            colModel:[
+                {name:"id",align:"center",editable:true,hidden:true},//hidden  隐藏该列
+                {name:"username",classes:"aa bb",editable:true},
+                {name:"password",editable:true},
+                {name:"age",formatter:function(cellvalue,options,rowObiect) {
+                       //formatter对于后台传过来的数据可以再加工
+                        if(cellvalue<=30&&cellvalue>=18)
+                            return "青年";
+                        if(cellvalue<=60&&cellvalue>30)
+                            return "壮年";
+                        if(cellvalue>60)
+                            return "老年";
+                        if(cellvalue<18)
+                            return "少年";
+                    }},
+                {name:"sex",editable:true,edittype:"select",editoptions:{value:"1:男;2:女"}},
+            ]
+        }).jqGrid("navGrid","#pager",{edit:true})
+    });
+    </script>
+
+</head>
+<body>
+
+    <table id="table"></table>
+<div id="pager" ></div>
+</body>
+</html>
